@@ -1,0 +1,10 @@
+#!/bin/sh
+# Turcryptor CLI launcher.
+#
+# AppImage desktop sessions can leak their own LD_LIBRARY_PATH into the
+# environment, which breaks virtualenv detection in this CPython build.
+# Stripping it before launch keeps the venv working everywhere.
+#
+# Usage: ./turcryptor
+DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+exec env -u LD_LIBRARY_PATH "$DIR/.venv/bin/python" "$DIR/cryptor.py" "$@"

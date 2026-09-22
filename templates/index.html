@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔒</text></svg>">
+  <title>TURCRYPTOR — Secure Text Encryption</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap">
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+
+  <div class="glow glow-a"></div>
+  <div class="glow glow-b"></div>
+
+  <main class="shell">
+
+    <header class="hero">
+      <button type="button" class="lang" id="lang-toggle" title="Toggle language / تغییر زبان">فا</button>
+      <h1 class="logo">TURCRYPTOR</h1>
+      <p class="tagline" data-i18n="tagline">Secure Text Encryption</p>
+      <p class="badges" data-i18n="badges">AES-256-GCM · Scrypt · Local Only</p>
+    </header>
+
+    <section class="card">
+
+      <nav class="tabs" role="tablist">
+        <button class="tab active" id="tab-lock" data-mode="lock" role="tab">
+          🔒 <span data-i18n="tabLock">LOCK</span><small data-i18n="tabLockSub">Encrypt</small>
+        </button>
+        <button class="tab" id="tab-unlock" data-mode="unlock" role="tab">
+          🔓 <span data-i18n="tabUnlock">UNLOCK</span><small data-i18n="tabUnlockSub">Decrypt</small>
+        </button>
+      </nav>
+
+      <!-- ── ENCRYPT ─────────────────────────────────────────────── -->
+      <form class="pane" id="pane-lock" autocomplete="off">
+        <label class="field">
+          <span class="field-label" data-i18n="encMessage">Message</span>
+          <textarea id="enc-message" rows="5" maxlength="100000"
+                    placeholder="Type the message to encrypt…"
+                    data-i18n-ph="encMessagePh"></textarea>
+        </label>
+
+        <div class="row">
+          <label class="field">
+            <span class="field-label" data-i18n="password">Password</span>
+            <div class="pw-wrap">
+              <input type="password" id="enc-password" autocomplete="new-password" placeholder="••••••••">
+              <button type="button" class="eye" data-target="enc-password" aria-label="Show password" data-i18n-aria="showPw">👁</button>
+            </div>
+          </label>
+          <label class="field">
+            <span class="field-label" data-i18n="confirm">Confirm</span>
+            <input type="password" id="enc-confirm" autocomplete="new-password" placeholder="••••••••">
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-lock" id="enc-submit">
+          <span class="btn-idle" data-i18n="encSubmit">🔒 &nbsp;ENCRYPT</span>
+          <span class="btn-busy" hidden data-i18n="encBusy">◌ &nbsp;ENCRYPTING…</span>
+        </button>
+      </form>
+
+      <!-- ── DECRYPT ─────────────────────────────────────────────── -->
+      <form class="pane" id="pane-unlock" hidden autocomplete="off">
+        <label class="field">
+          <span class="field-label" data-i18n="decPayload">Encrypted payload</span>
+          <textarea id="dec-payload" rows="5" spellcheck="false" dir="auto"
+                    placeholder="TC1:xxxxxxxx…"></textarea>
+        </label>
+
+        <label class="field">
+          <span class="field-label" data-i18n="password">Password</span>
+          <div class="pw-wrap">
+            <input type="password" id="dec-password" autocomplete="off" placeholder="••••••••">
+            <button type="button" class="eye" data-target="dec-password" aria-label="Show password" data-i18n-aria="showPw">👁</button>
+          </div>
+        </label>
+
+        <button type="submit" class="btn btn-unlock" id="dec-submit">
+          <span class="btn-idle" data-i18n="decSubmit">🔓 &nbsp;DECRYPT</span>
+          <span class="btn-busy" hidden data-i18n="decBusy">◌ &nbsp;DECRYPTING…</span>
+        </button>
+      </form>
+
+      <!-- ── STATUS ──────────────────────────────────────────────── -->
+      <p class="status" id="status" hidden></p>
+
+      <!-- ── RESULT ──────────────────────────────────────────────── -->
+      <section class="result" id="result" hidden>
+        <div class="result-head">
+          <span id="result-title" data-i18n="encTitle">ENCRYPTED PAYLOAD</span>
+          <button type="button" class="copy" id="copy-btn" data-i18n="copy">⧉ Copy</button>
+        </div>
+        <pre id="result-body" dir="auto"></pre>
+      </section>
+
+    </section>
+
+    <footer class="foot" data-i18n="footer">
+      crafted by Yassin · everything stays on this machine
+    </footer>
+
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

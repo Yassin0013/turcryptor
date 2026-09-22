@@ -1,0 +1,350 @@
+/* ── TURCRYPTOR web UI ─────────────────────────────────────────────── */
+
+:root {
+  --bg: #0a0d14;
+  --panel: #10151f;
+  --panel-2: #141b28;
+  --line: #232d40;
+  --text: #e8ecf4;
+  --dim: #7c8aa0;
+  --magenta: #e05cff;
+  --cyan: #46e6ff;
+  --red: #ff5470;
+  --yellow: #ffd166;
+  --green: #4ef0b0;
+}
+
+* { box-sizing: border-box; }
+
+/* keep the hidden attribute winning over any display rule */
+[hidden] { display: none !important; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Vazirmatn", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ambient neon glows */
+.glow {
+  position: fixed;
+  width: 45vmax;
+  height: 45vmax;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: .13;
+  pointer-events: none;
+  z-index: 0;
+}
+.glow-a { background: var(--magenta); top: -15vmax; left: -10vmax; }
+.glow-b { background: var(--cyan);    bottom: -18vmax; right: -10vmax; }
+
+.shell {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 48px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  min-height: 100%;
+}
+
+/* ── language toggle ────────────────────────────────────────────── */
+
+.lang {
+  position: absolute;
+  top: -14px;
+  inset-inline-start: 0;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--dim);
+  font: inherit;
+  font-size: .8rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.lang:hover { color: var(--text); border-color: var(--cyan); }
+
+/* ── RTL (Persian) ──────────────────────────────────────────────── */
+
+html[dir="rtl"] body,
+html[dir="rtl"] textarea,
+html[dir="rtl"] input {
+  font-family: "Vazirmatn", "Segoe UI", system-ui, sans-serif;
+}
+
+/* letter-spacing breaks the flow of Arabic-script text */
+html[dir="rtl"] .tagline,
+html[dir="rtl"] .badges,
+html[dir="rtl"] .field-label,
+html[dir="rtl"] .btn,
+html[dir="rtl"] .tab span,
+html[dir="rtl"] .result-head {
+  letter-spacing: 0;
+}
+
+html[dir="rtl"] .logo { letter-spacing: .1em; }
+
+/* the hero positions the toggle; keep it relative */
+.hero { position: relative; }
+
+/* ── header ─────────────────────────────────────────────────────── */
+
+.hero { text-align: center; }
+
+.logo {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 3.1rem);
+  font-weight: 900;
+  letter-spacing: .14em;
+  background: linear-gradient(90deg, #ff5cf0, #b44cff, #4d8cff, #46e6ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 42px rgba(180, 76, 255, .35);
+}
+
+.tagline {
+  margin: 6px 0 2px;
+  font-weight: 600;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: .8rem;
+  color: var(--text);
+}
+
+.badges {
+  margin: 0;
+  font-size: .78rem;
+  color: var(--dim);
+  letter-spacing: .08em;
+}
+
+/* ── card & tabs ────────────────────────────────────────────────── */
+
+.card {
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, .55);
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 8px;
+  background: transparent;
+  color: var(--dim);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  font: inherit;
+  transition: all .18s ease;
+}
+
+.tab span { font-weight: 800; letter-spacing: .12em; font-size: .95rem; }
+.tab small { font-size: .72rem; opacity: .75; }
+
+.tab:hover { color: var(--text); border-color: #33405c; }
+
+.tab.active { color: var(--text); background: rgba(70, 90, 130, .12); }
+
+#tab-lock.active {
+  border-color: var(--magenta);
+  box-shadow: 0 0 18px rgba(224, 92, 255, .25), inset 0 0 12px rgba(224, 92, 255, .08);
+}
+
+#tab-unlock.active {
+  border-color: var(--cyan);
+  box-shadow: 0 0 18px rgba(70, 230, 255, .25), inset 0 0 12px rgba(70, 230, 255, .08);
+}
+
+/* ── fields ─────────────────────────────────────────────────────── */
+
+.pane { display: flex; flex-direction: column; gap: 14px; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+
+.field-label {
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+textarea, input[type="password"], input[type="text"] {
+  width: 100%;
+  background: #0b101a;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 11px 13px;
+  color: var(--text);
+  font: inherit;
+  font-size: .95rem;
+  resize: vertical;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+textarea:focus, input:focus {
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(70, 230, 255, .12);
+}
+
+#pane-lock textarea:focus {
+  border-color: var(--magenta);
+  box-shadow: 0 0 0 3px rgba(224, 92, 255, .12);
+}
+
+#enc-payload, #dec-payload { font-family: "JetBrains Mono", "Fira Mono", ui-monospace, monospace; font-size: .85rem; }
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.pw-wrap { position: relative; }
+
+.pw-wrap input { padding-right: 42px; }
+
+.eye {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: .95rem;
+  opacity: .55;
+  padding: 4px 6px;
+}
+.eye:hover { opacity: 1; }
+
+/* ── buttons ────────────────────────────────────────────────────── */
+
+.btn {
+  padding: 13px;
+  border: none;
+  border-radius: 12px;
+  font: inherit;
+  font-weight: 800;
+  letter-spacing: .14em;
+  cursor: pointer;
+  color: #0a0d14;
+  transition: transform .1s ease, filter .15s ease, opacity .15s ease;
+}
+
+.btn:hover:not(:disabled) { filter: brightness(1.12); }
+.btn:active:not(:disabled) { transform: scale(.985); }
+.btn:disabled { opacity: .6; cursor: wait; }
+
+.btn-lock {
+  background: linear-gradient(90deg, #ff5cf0, #b44cff);
+  box-shadow: 0 6px 26px rgba(224, 92, 255, .35);
+}
+
+.btn-unlock {
+  background: linear-gradient(90deg, #4d8cff, #46e6ff);
+  box-shadow: 0 6px 26px rgba(70, 230, 255, .3);
+}
+
+/* ── status & result ────────────────────────────────────────────── */
+
+.status {
+  margin: 18px 0 0;
+  text-align: center;
+  font-size: .88rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.status.error   { color: var(--red);    border-color: rgba(255, 84, 112, .35);  background: rgba(255, 84, 112, .07); }
+.status.warning { color: var(--yellow); border-color: rgba(255, 209, 102, .35); background: rgba(255, 209, 102, .07); }
+.status.success { color: var(--green);  border-color: rgba(78, 240, 176, .35);  background: rgba(78, 240, 176, .07); }
+
+.result {
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #0b101a;
+  overflow: hidden;
+}
+
+.result-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .18em;
+  color: var(--dim);
+}
+
+.copy {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--dim);
+  font: inherit;
+  font-size: .74rem;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.copy:hover { color: var(--text); border-color: var(--cyan); }
+
+.copy.done { color: var(--green); border-color: var(--green); }
+
+#result-body {
+  margin: 0;
+  padding: 14px;
+  max-height: 260px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: "JetBrains Mono", "Fira Mono", ui-monospace, monospace;
+  font-size: .82rem;
+  line-height: 1.55;
+}
+
+/* ── footer ─────────────────────────────────────────────────────── */
+
+.foot {
+  text-align: center;
+  font-size: .74rem;
+  color: var(--dim);
+  letter-spacing: .06em;
+}
+
+@media (max-width: 520px) {
+  .row { grid-template-columns: 1fr; }
+  .shell { padding-top: 32px; }
+}
